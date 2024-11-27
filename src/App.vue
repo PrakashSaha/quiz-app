@@ -50,20 +50,17 @@ defineComponent({});
 
 <style scoped>
 .page-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh; /* Full viewport height */
-  margin: 0; /* Reset default margin */
-  background-color: #f0f0f0; /* Optional background color */
-}
-.container{
-  width: 400px;
-  text-align: center;
-  padding: 40px;
-  border-radius: 20px;
-  background-color: aquamarine;
-}
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(145deg, #000428, #004e92);
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
 
 </style>
 

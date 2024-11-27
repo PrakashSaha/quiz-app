@@ -119,18 +119,18 @@ const currentQuestionIndex = ref(0);
 const quizResults = ref(null);
 
 // Timer variables
-const timer = ref(60); // 60 seconds for the quiz
+const timer = ref(30); 
 let timerInterval = null;
 
 // Start the timer
 function startTimer() {
-  timer.value = 60; // Reset timer to 60 seconds
+  timer.value = 30; 
   timerInterval = setInterval(() => {
     if (timer.value > 0) {
       timer.value--;
     } else {
       stopTimer();
-      submitQuiz(); // Automatically submit the quiz when time is up
+      submitQuiz(); 
     }
   }, 1000);
 }
@@ -205,20 +205,25 @@ onMounted(() => {
 
 <template>
   <div>
-    <h2 class="title">Quiz App</h2>
-    <hr />
-    
     <div v-if="!quizResults">
-      <!-- Timer display -->
-      <p class="timer">Time Remaining: {{ timer }} seconds</p>
-      
-      <div class="question-container">
-        <h4 class="questions">
-          {{ Questions[currentQuestionIndex].question }}
-        </h4>
-        <div class="answer-buttons">
+      <div class="millionaire-container">
+        <!-- Header -->
+        <header class="header">
+          <h1>Quiz Application</h1>
+        </header>
+        <p class="timer">Time Remaining: {{ timer }} seconds</p>
+
+        <!-- Question Area -->
+        <div class="question-area">
+          <div class="question-box">
+            <p class="question-text">{{ Questions[currentQuestionIndex].question }}</p>
+          </div>
+        </div>
+
+        <!-- Answer Options -->
+        <div class="answers">
           <button
-            class="btn"
+            class="answer"
             v-for="(option, optionIndex) in Questions[currentQuestionIndex].options"
             :key="optionIndex"
             :class="{ selected: selectedAnswers[currentQuestionIndex] === optionIndex }"
@@ -227,36 +232,91 @@ onMounted(() => {
             {{ option.text }}
           </button>
         </div>
+
+        <button class="answer" @click="goToNextQuestion">
+          {{ currentQuestionIndex < Questions.length - 1 ? "Next" : "Submit" }}
+        </button>
       </div>
-      
-      <button class="next" @click="goToNextQuestion">
-        {{ currentQuestionIndex < Questions.length - 1 ? "Next" : "Submit" }}
-      </button>
     </div>
-    
+
     <div v-else>
       <h3>Quiz Results</h3>
       <p>{{ quizResults.correctAnswers }} / {{ quizResults.totalQuestions }}</p>
-      <p
-        v-for="(result, index) in quizResults.results"
-        :key="index"
-        :class="{ correct: result.isCorrect, incorrect: !result.isCorrect }"
-      >
-        {{ result.isCorrect ? "Right" : "Wrong" }}
-      </p>
-      
-      <button class="reload" @click="reloadGame">Reload Game</button>
+      <div v-for="(result, index) in quizResults.results" :key="index" :class="{ correct: result.isCorrect, incorrect: !result.isCorrect }">
+        <h1>{{ result.question }}</h1>
+        <strong>
+          <p>Selected: {{ result.selectedAnswer }} ({{ result.isCorrect ? "Correct" : "Wrong" }})</p>
+        </strong>
+      </div>
+
+      <button class="answer" @click="reloadGame">Reload Game</button>
     </div>
   </div>
 </template>
 
+
 <style scoped>
-/* Add timer styles */
-.timer {
-  font-size: 18px;
-  font-weight: bold;
-  color: red;
-  margin-bottom: 10px;
-}
-/* Rest of the styles remain unchanged */
+/* Global Styling */
+  
+.millionaire-container {
+    width: 90%;
+    max-width: 800px;
+    text-align: center;
+  }
+  
+  /* Header */
+  .header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  
+  /* Question Area */
+  .question-area {
+    margin: 20px 0;
+    padding: 10px;
+    border: 3px solid #ffd700;
+    border-radius: 20px;
+    width: 730px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    background: rgba(255, 215, 0, 0.2);
+  }
+  
+  .question-box {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  
+  /* Answer Options */
+  .answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 20px 0;
+  }
+  
+  .answer {
+    background-color: #001f54;
+    color: #fff;
+    border: 2px solid #ffd700;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .answer:hover {
+    background-color: #ffd700;
+    color: #000;
+  }
+
+  .answer:selected{
+    background-color: rgb(30, 255, 0);
+    color: aliceblue;
+  }
 </style>
